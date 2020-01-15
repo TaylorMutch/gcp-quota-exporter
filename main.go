@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
 	"sync"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
 	"google.golang.org/api/compute/v1"
-	"google.golang.org/api/option"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -77,17 +75,10 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 }
 
 // NewExporter returns an initialised Exporter.
-func NewExporter(credfile string, project string) (*Exporter, error) {
-
-	// Read credentials from JSON file into a byte array
-	var credentials, err = ioutil.ReadFile(credfile)
-	if err != nil {
-		log.Fatalf("Unable to read credentials file: %v", err)
-	}
-
+func NewExporter(project string) (*Exporter, error) {
 	// Create context and generate compute.Service
 	ctx := context.Background()
-	computeService, err := compute.NewService(ctx, option.WithCredentialsJSON(credentials))
+    computeService, err := compute.NewService(ctx)
 	if err != nil {
 		log.Fatalf("Unable to create service: %v", err)
 	}
@@ -105,7 +96,6 @@ func main() {
 		gcpProjectID   = kingpin.Arg("gcp_project_id", "ID of Google Project to be monitored.").Required().String()
 		listenAddress  = kingpin.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":9592").String()
 		metricsPath    = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
-		gcpCredentials = kingpin.Flag("gcp.credentials-path", "Path to Google Cloud Platform credentials json file.").Default("credentials.json").String()
 		basePath       = kingpin.Flag("test.base-path", "Change the default googleapis URL (for testing purposes only).").Default("").String()
 	)
 
@@ -117,7 +107,7 @@ func main() {
 	log.Infoln("Starting gcp_quota_exporter", version.Info())
 	log.Infoln("Build context", version.BuildContext())
 
-	exporter, err := NewExporter(*gcpCredentials, *gcpProjectID)
+	exporter, err := NewExporter(*gcpProjectID)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -7,7 +7,7 @@ Exports limits and usage for metrics available through the GCP APIs (currently o
 1. Set up a service account in the project you wish to monitor. The account should be given the following permissions:
    * compute.projects.get
    * compute.regions.list
-1. Create a key for the service account and save as a JSON somewhere (by default the exporter will look for `./credentials.json`)
+1. Create a key for the service account, save as a JSON somewhere and set `GOOGLE_APPLICATION_CREDENTIALS` to its location
 1. Run it and provide a project name:
 ```bash
 ./gcp-quota-exporter myproject
