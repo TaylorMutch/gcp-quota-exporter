@@ -16,7 +16,7 @@ import (
 var (
 	limitDesc = prometheus.NewDesc("gcp_quota_limit", "quota limits for GCP components", []string{"project", "region", "metric"}, nil)
 	usageDesc = prometheus.NewDesc("gcp_quota_usage", "quota usage for GCP components", []string{"project", "region", "metric"}, nil)
-	upDesc    = prometheus.NewDesc("up", "Was the last scrape of the Google API successful.", nil, nil)
+	upDesc    = prometheus.NewDesc("gcp_quota_last_scrape_success", "Was the last scrape of the Google API successful.", nil, nil)
 )
 
 // Exporter collects quota stats from the Google Compute API and exports them using the Prometheus metrics package.
