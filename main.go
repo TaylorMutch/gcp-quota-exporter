@@ -78,7 +78,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 func NewExporter(project string) (*Exporter, error) {
 	// Create context and generate compute.Service
 	ctx := context.Background()
-    computeService, err := compute.NewService(ctx)
+	computeService, err := compute.NewService(ctx)
 	if err != nil {
 		log.Fatalf("Unable to create service: %v", err)
 	}
@@ -93,10 +93,10 @@ func main() {
 
 	var (
 		// Default port added to https://github.com/prometheus/prometheus/wiki/Default-port-allocations
-		gcpProjectID   = kingpin.Arg("gcp_project_id", "ID of Google Project to be monitored.").Required().String()
-		listenAddress  = kingpin.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":9592").String()
-		metricsPath    = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
-		basePath       = kingpin.Flag("test.base-path", "Change the default googleapis URL (for testing purposes only).").Default("").String()
+		gcpProjectID  = kingpin.Arg("gcp-project-id", "ID of Google Project to be monitored.").Required().String()
+		listenAddress = kingpin.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Default(":9592").String()
+		metricsPath   = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
+		basePath      = kingpin.Flag("test.base-path", "Change the default googleapis URL (for testing purposes only).").Default("").String()
 	)
 
 	log.AddFlags(kingpin.CommandLine)
@@ -131,5 +131,4 @@ func main() {
              </html>`))
 	})
 	log.Fatal(http.ListenAndServe(*listenAddress, nil))
-
 }
